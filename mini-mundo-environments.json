@@ -1,0 +1,42 @@
+{
+  "id": "your-environment-id",
+  "name": "Mini Mundo Environments",
+  "values": [
+    {
+      "key": "dev_url",
+      "value": "http://localhost:8080/api",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "prod_url",
+      "value": "https://api.minimundo.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "dev_token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "prod_token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "projetoId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "tarefaId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    }
+  ]
+} 
