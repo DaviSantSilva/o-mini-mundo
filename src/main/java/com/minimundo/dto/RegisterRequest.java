@@ -1,5 +1,6 @@
 package com.minimundo.dto;
 
+import com.minimundo.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,4 +14,5 @@ public class RegisterRequest {
     private String nome;
     private String email;
     private String senha;
+    private Role role;
 } 

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
@@ -21,4 +22,9 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
     
     @Query("SELECT t FROM Tarefa t WHERE t.usuario.id = :usuarioId AND t.projeto.id = :projetoId AND t.status = :status")
     List<Tarefa> findByUsuarioIdAndProjetoIdAndStatus(@Param("usuarioId") Long usuarioId, @Param("projetoId") Long projetoId, @Param("status") StatusTarefa status);
+
+    List<Tarefa> findByProjetoIdAndUsuarioId(Long projetoId, Long usuarioId);
+    List<Tarefa> findByDescricaoContainingIgnoreCaseAndUsuarioId(String descricao, Long usuarioId);
+    List<Tarefa> findByProjetoIdAndStatusAndUsuarioId(Long projetoId, StatusTarefa status, Long usuarioId);
+    Optional<Tarefa> findByIdAndUsuarioId(Long id, Long usuarioId);
 } 

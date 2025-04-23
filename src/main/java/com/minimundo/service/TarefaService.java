@@ -1,6 +1,7 @@
 package com.minimundo.service;
 
 import com.minimundo.dto.TarefaDTO;
+import com.minimundo.exception.BusinessException;
 import com.minimundo.model.Projeto;
 import com.minimundo.model.Tarefa;
 import com.minimundo.model.StatusTarefa;
@@ -20,149 +21,97 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TarefaService {
 
-    private final TarefaRepository tarefaRepository;
+    private final TarefaRepository repository;
     private final ProjetoRepository projetoRepository;
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
     public TarefaDTO criar(TarefaDTO dto, Long usuarioId) {
-        Projeto projeto = projetoRepository.findById(dto.getProjetoId())
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
-
-        if (!projeto.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
-
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        if (dto.getDataFim() != null && dto.getDataInicio() != null && dto.getDataFim().isBefore(dto.getDataInicio())) {
-            throw new RuntimeException("A data de fim não pode ser anterior à data de início");
-        }
-
-        Tarefa tarefa = Tarefa.builder()
+        validarDatas(dto.getDataInicio(), dto.getDataFim());
+        
+        var projeto = projetoRepository.findByIdAndUsuarioId(dto.getProjetoId(), usuarioId)
+                .orElseThrow(() -> new BusinessException("Projeto não encontrado"));
+        
+        var tarefa = Tarefa.builder()
                 .descricao(dto.getDescricao())
                 .projeto(projeto)
                 .dataInicio(dto.getDataInicio())
                 .dataFim(dto.getDataFim())
+                .tarefaPredecessora(dto.getTarefaPredecessoraId() != null ? 
+                        repository.findById(dto.getTarefaPredecessoraId())
+                                .orElseThrow(() -> new BusinessException("Tarefa predecessora não encontrada"))
+                        : null)
                 .status(dto.getStatus())
-                .usuario(usuario)
+                .usuario(Usuario.builder().id(usuarioId).build())
                 .build();
-
-        if (dto.getTarefaPredecessoraId() != null) {
-            Tarefa predecessora = tarefaRepository.findById(dto.getTarefaPredecessoraId())
-                    .orElseThrow(() -> new RuntimeException("Tarefa predecessora não encontrada"));
-            tarefa.setTarefaPredecessora(predecessora);
-        }
-
-        tarefa = tarefaRepository.save(tarefa);
-        return converterParaDTO(tarefa);
+        
+        return TarefaDTO.fromEntity(repository.save(tarefa));
     }
 
-    @Transactional(readOnly = true)
     public List<TarefaDTO> listarPorProjeto(Long projetoId, Long usuarioId) {
-        Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
-
-        if (!projeto.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
-
-        return tarefaRepository.findByProjetoId(projetoId)
+        return repository.findByProjetoIdAndUsuarioId(projetoId, usuarioId)
                 .stream()
-                .map(this::converterParaDTO)
+                .map(TarefaDTO::fromEntity)
                 .collect(Collectors.toList());
     }
-    
-    @Transactional(readOnly = true)
+
     public List<TarefaDTO> pesquisarPorDescricao(String descricao, Long usuarioId) {
-        return tarefaRepository.findByUsuarioIdAndDescricaoContainingIgnoreCase(usuarioId, descricao)
+        return repository.findByDescricaoContainingIgnoreCaseAndUsuarioId(descricao, usuarioId)
                 .stream()
-                .map(this::converterParaDTO)
+                .map(TarefaDTO::fromEntity)
                 .collect(Collectors.toList());
     }
-    
-    @Transactional(readOnly = true)
+
     public List<TarefaDTO> listarPorProjetoEStatus(Long projetoId, StatusTarefa status, Long usuarioId) {
-        Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
-
-        if (!projeto.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
-
-        return tarefaRepository.findByUsuarioIdAndProjetoIdAndStatus(usuarioId, projetoId, status)
+        return repository.findByProjetoIdAndStatusAndUsuarioId(projetoId, status, usuarioId)
                 .stream()
-                .map(this::converterParaDTO)
+                .map(TarefaDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
     public TarefaDTO buscarPorId(Long id, Long usuarioId) {
-        Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
-
-        if (!tarefa.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
-
-        return converterParaDTO(tarefa);
+        return repository.findByIdAndUsuarioId(id, usuarioId)
+                .map(TarefaDTO::fromEntity)
+                .orElseThrow(() -> new BusinessException("Tarefa não encontrada"));
     }
 
     @Transactional
     public TarefaDTO atualizar(Long id, TarefaDTO dto, Long usuarioId) {
-        Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
-
-        if (!tarefa.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
-
-        if (dto.getDataFim() != null && dto.getDataInicio() != null && dto.getDataFim().isBefore(dto.getDataInicio())) {
-            throw new RuntimeException("A data de fim não pode ser anterior à data de início");
-        }
-
+        validarDatas(dto.getDataInicio(), dto.getDataFim());
+        
+        var tarefa = repository.findByIdAndUsuarioId(id, usuarioId)
+                .orElseThrow(() -> new BusinessException("Tarefa não encontrada"));
+        
         tarefa.setDescricao(dto.getDescricao());
         tarefa.setDataInicio(dto.getDataInicio());
         tarefa.setDataFim(dto.getDataFim());
         tarefa.setStatus(dto.getStatus());
-
+        
         if (dto.getTarefaPredecessoraId() != null) {
-            Tarefa predecessora = tarefaRepository.findById(dto.getTarefaPredecessoraId())
-                    .orElseThrow(() -> new RuntimeException("Tarefa predecessora não encontrada"));
-            tarefa.setTarefaPredecessora(predecessora);
+            tarefa.setTarefaPredecessora(repository.findById(dto.getTarefaPredecessoraId())
+                    .orElseThrow(() -> new BusinessException("Tarefa predecessora não encontrada")));
+        } else {
+            tarefa.setTarefaPredecessora(null);
         }
-
-        tarefa = tarefaRepository.save(tarefa);
-        return converterParaDTO(tarefa);
+        
+        return TarefaDTO.fromEntity(repository.save(tarefa));
     }
 
     @Transactional
     public void excluir(Long id, Long usuarioId) {
-        Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
-
-        if (!tarefa.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
+        var tarefa = repository.findByIdAndUsuarioId(id, usuarioId)
+                .orElseThrow(() -> new BusinessException("Tarefa não encontrada"));
+        
+        if (!tarefa.getTarefasDependentes().isEmpty()) {
+            throw new BusinessException("Não é possível excluir a tarefa pois existem tarefas dependentes");
         }
-
-        if (tarefaRepository.existsByTarefaPredecessoraId(id)) {
-            throw new RuntimeException("Não é possível excluir uma tarefa que é predecessora de outra");
-        }
-
-        tarefaRepository.delete(tarefa);
+        
+        repository.delete(tarefa);
     }
 
-    private TarefaDTO converterParaDTO(Tarefa tarefa) {
-        return TarefaDTO.builder()
-                .id(tarefa.getId())
-                .descricao(tarefa.getDescricao())
-                .projetoId(tarefa.getProjeto().getId())
-                .dataInicio(tarefa.getDataInicio())
-                .dataFim(tarefa.getDataFim())
-                .tarefaPredecessoraId(tarefa.getTarefaPredecessora() != null ? tarefa.getTarefaPredecessora().getId() : null)
-                .status(tarefa.getStatus())
-                .usuarioId(tarefa.getUsuario().getId())
-                .build();
+    private void validarDatas(LocalDateTime dataInicio, LocalDateTime dataFim) {
+        if (dataInicio != null && dataFim != null && dataFim.isBefore(dataInicio)) {
+            throw new BusinessException("A data de fim não pode ser anterior à data de início");
+        }
     }
 } 

@@ -1,30 +1,40 @@
 package com.minimundo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.minimundo.config.SecurityTestConfig;
 import com.minimundo.dto.ProjetoDTO;
+import com.minimundo.dto.ProjetoProgressoDTO;
 import com.minimundo.model.Projeto;
 import com.minimundo.model.StatusProjeto;
 import com.minimundo.model.Usuario;
+import com.minimundo.security.JwtAuthenticationFilter;
+import com.minimundo.security.JwtService;
+import com.minimundo.security.CustomUserDetailsService;
 import com.minimundo.service.ProjetoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProjetoController.class)
+@Import({SecurityTestConfig.class, JwtService.class, JwtAuthenticationFilter.class, CustomUserDetailsService.class})
+@ActiveProfiles("test")
 class ProjetoControllerTest {
 
     @Autowired
@@ -33,12 +43,19 @@ class ProjetoControllerTest {
     @MockBean
     private ProjetoService projetoService;
 
+    @MockBean
+    private CustomUserDetailsService userDetailsService;
+
+    @MockBean
+    private JwtService jwtService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     private Projeto projeto;
     private ProjetoDTO projetoDTO;
     private Usuario usuario;
+    private ProjetoProgressoDTO progressoDTO;
 
     @BeforeEach
     void setUp() {
@@ -60,13 +77,22 @@ class ProjetoControllerTest {
         projetoDTO.setDescricao("Descrição do projeto teste");
         projetoDTO.setStatus(StatusProjeto.ATIVO);
         projetoDTO.setOrcamento(new BigDecimal("10000.00"));
+
+        progressoDTO = ProjetoProgressoDTO.builder()
+                .projetoId(1L)
+                .nomeProjeto("Projeto Teste")
+                .totalTarefas(10)
+                .tarefasConcluidas(5)
+                .tarefasNaoConcluidas(5)
+                .percentualConcluido(50.0)
+                .build();
     }
 
     @Test
     @WithMockUser
     void testCriarProjeto() throws Exception {
-        when(projetoService.criarProjeto(any(ProjetoDTO.class), any(Usuario.class)))
-            .thenReturn(projeto);
+        when(projetoService.criar(any(ProjetoDTO.class), anyLong()))
+            .thenReturn(projetoDTO);
 
         mockMvc.perform(post("/projetos")
                 .with(csrf())
@@ -80,8 +106,8 @@ class ProjetoControllerTest {
     @Test
     @WithMockUser
     void testListarProjetos() throws Exception {
-        when(projetoService.listarProjetos(anyLong()))
-            .thenReturn(Arrays.asList(projeto));
+        when(projetoService.listarPorUsuario(anyLong()))
+            .thenReturn(Arrays.asList(projetoDTO));
 
         mockMvc.perform(get("/projetos"))
                 .andExpect(status().isOk())
@@ -92,8 +118,8 @@ class ProjetoControllerTest {
     @Test
     @WithMockUser
     void testBuscarProjetoPorId() throws Exception {
-        when(projetoService.buscarProjetoPorId(anyLong(), anyLong()))
-            .thenReturn(projeto);
+        when(projetoService.buscarPorId(anyLong(), anyLong()))
+            .thenReturn(projetoDTO);
 
         mockMvc.perform(get("/projetos/1"))
                 .andExpect(status().isOk())
@@ -104,8 +130,8 @@ class ProjetoControllerTest {
     @Test
     @WithMockUser
     void testAtualizarProjeto() throws Exception {
-        when(projetoService.atualizarProjeto(anyLong(), any(ProjetoDTO.class), anyLong()))
-            .thenReturn(projeto);
+        when(projetoService.atualizar(anyLong(), any(ProjetoDTO.class), anyLong()))
+            .thenReturn(projetoDTO);
 
         mockMvc.perform(put("/projetos/1")
                 .with(csrf())
@@ -128,10 +154,11 @@ class ProjetoControllerTest {
     @WithMockUser
     void testCalcularProgresso() throws Exception {
         when(projetoService.calcularProgresso(anyLong(), anyLong()))
-            .thenReturn(50.0);
+            .thenReturn(progressoDTO);
 
         mockMvc.perform(get("/projetos/1/progresso"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.percentualConcluido").value(50.0));
+                .andExpect(jsonPath("$.projetoId").value(progressoDTO.getProjetoId()))
+                .andExpect(jsonPath("$.percentualConcluido").value(progressoDTO.getPercentualConcluido()));
     }
 } 

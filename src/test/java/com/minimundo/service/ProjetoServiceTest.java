@@ -4,6 +4,7 @@ import com.minimundo.dto.ProjetoDTO;
 import com.minimundo.exception.BusinessException;
 import com.minimundo.model.Projeto;
 import com.minimundo.model.StatusProjeto;
+import com.minimundo.model.Tarefa;
 import com.minimundo.model.Usuario;
 import com.minimundo.repository.ProjetoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -21,6 +21,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,23 +62,22 @@ class ProjetoServiceTest {
 
     @Test
     void testCriarProjeto() {
-        when(projetoRepository.existsByNomeAndUsuarioId(anyString(), anyLong())).thenReturn(false);
+        when(projetoRepository.existsByNome(anyString())).thenReturn(false);
         when(projetoRepository.save(any(Projeto.class))).thenReturn(projeto);
 
-        Projeto resultado = projetoService.criarProjeto(projetoDTO, usuario);
+        ProjetoDTO resultado = projetoService.criar(projetoDTO, usuario.getId());
 
         assertNotNull(resultado);
         assertEquals(projetoDTO.getNome(), resultado.getNome());
-        assertEquals(usuario, resultado.getUsuario());
         verify(projetoRepository).save(any(Projeto.class));
     }
 
     @Test
     void testCriarProjetoComNomeDuplicado() {
-        when(projetoRepository.existsByNomeAndUsuarioId(anyString(), anyLong())).thenReturn(true);
+        when(projetoRepository.existsByNome(anyString())).thenReturn(true);
 
         assertThrows(BusinessException.class, () -> {
-            projetoService.criarProjeto(projetoDTO, usuario);
+            projetoService.criar(projetoDTO, usuario.getId());
         });
     }
 
@@ -84,7 +85,7 @@ class ProjetoServiceTest {
     void testListarProjetos() {
         when(projetoRepository.findByUsuarioId(anyLong())).thenReturn(Arrays.asList(projeto));
 
-        List<Projeto> resultados = projetoService.listarProjetos(usuario.getId());
+        List<ProjetoDTO> resultados = projetoService.listarPorUsuario(usuario.getId());
 
         assertNotNull(resultados);
         assertEquals(1, resultados.size());
@@ -95,7 +96,7 @@ class ProjetoServiceTest {
     void testBuscarProjetoPorId() {
         when(projetoRepository.findById(anyLong())).thenReturn(Optional.of(projeto));
 
-        Projeto resultado = projetoService.buscarProjetoPorId(1L, usuario.getId());
+        ProjetoDTO resultado = projetoService.buscarPorId(1L, usuario.getId());
 
         assertNotNull(resultado);
         assertEquals(projeto.getId(), resultado.getId());
@@ -107,7 +108,7 @@ class ProjetoServiceTest {
         when(projetoRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class, () -> {
-            projetoService.buscarProjetoPorId(1L, usuario.getId());
+            projetoService.buscarPorId(1L, usuario.getId());
         });
     }
 
@@ -116,7 +117,7 @@ class ProjetoServiceTest {
         when(projetoRepository.findById(anyLong())).thenReturn(Optional.of(projeto));
         when(projetoRepository.save(any(Projeto.class))).thenReturn(projeto);
 
-        Projeto resultado = projetoService.atualizarProjeto(1L, projetoDTO, usuario.getId());
+        ProjetoDTO resultado = projetoService.atualizar(1L, projetoDTO, usuario.getId());
 
         assertNotNull(resultado);
         assertEquals(projetoDTO.getNome(), resultado.getNome());
@@ -126,11 +127,10 @@ class ProjetoServiceTest {
     @Test
     void testExcluirProjeto() {
         when(projetoRepository.findById(anyLong())).thenReturn(Optional.of(projeto));
-        when(projetoRepository.existsById(anyLong())).thenReturn(true);
 
-        projetoService.excluirProjeto(1L, usuario.getId());
+        projetoService.excluir(1L, usuario.getId());
 
-        verify(projetoRepository).deleteById(1L);
+        verify(projetoRepository).delete(projeto);
     }
 
     @Test
@@ -139,7 +139,7 @@ class ProjetoServiceTest {
         when(projetoRepository.findById(anyLong())).thenReturn(Optional.of(projeto));
 
         assertThrows(BusinessException.class, () -> {
-            projetoService.excluirProjeto(1L, usuario.getId());
+            projetoService.excluir(1L, usuario.getId());
         });
     }
 } 

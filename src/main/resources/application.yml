@@ -20,4 +20,9 @@ jwt:
 server:
   port: 8080
   servlet:
-    context-path: /api 
+    context-path: /api
+
+logging:
+  level:
+    com.minimundo: DEBUG
+    org.springframework.security: DEBUG 

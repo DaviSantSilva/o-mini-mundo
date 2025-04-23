@@ -2,6 +2,7 @@ package com.minimundo.service;
 
 import com.minimundo.dto.ProjetoDTO;
 import com.minimundo.dto.ProjetoProgressoDTO;
+import com.minimundo.exception.BusinessException;
 import com.minimundo.model.Projeto;
 import com.minimundo.model.StatusTarefa;
 import com.minimundo.model.Usuario;
@@ -23,10 +24,8 @@ public class ProjetoService {
 
     @Transactional
     public ProjetoDTO criar(ProjetoDTO dto, Long usuarioId) {
-        if (projetoRepository.existsByNome(dto.getNome())) {
-            throw new RuntimeException("Já existe um projeto com este nome");
-        }
-
+        validarDuplicidadeNome(dto.getNome(), usuarioId);
+        
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -143,5 +142,11 @@ public class ProjetoService {
                 .orcamento(projeto.getOrcamento())
                 .usuarioId(projeto.getUsuario().getId())
                 .build();
+    }
+
+    private void validarDuplicidadeNome(String nome, Long usuarioId) {
+        if (projetoRepository.existsByNomeAndUsuarioId(nome, usuarioId)) {
+            throw new BusinessException("Já existe um projeto com este nome");
+        }
     }
 } 

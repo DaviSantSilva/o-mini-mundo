@@ -1,5 +1,6 @@
 package com.minimundo.dto;
 
+import com.minimundo.model.Tarefa;
 import com.minimundo.model.StatusTarefa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,4 +22,17 @@ public class TarefaDTO {
     private Long tarefaPredecessoraId;
     private StatusTarefa status;
     private Long usuarioId;
+
+    public static TarefaDTO fromEntity(Tarefa tarefa) {
+        return TarefaDTO.builder()
+                .id(tarefa.getId())
+                .descricao(tarefa.getDescricao())
+                .projetoId(tarefa.getProjeto().getId())
+                .dataInicio(tarefa.getDataInicio())
+                .dataFim(tarefa.getDataFim())
+                .tarefaPredecessoraId(tarefa.getTarefaPredecessora() != null ? tarefa.getTarefaPredecessora().getId() : null)
+                .status(tarefa.getStatus())
+                .usuarioId(tarefa.getUsuario().getId())
+                .build();
+    }
 } 
