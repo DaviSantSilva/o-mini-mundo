@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/o_mini_mundo?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/o_mini_mundo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,7 +15,7 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET:chaveSecretaParaGerarTokensJWTNoMiniMundo}
-  expiration: 86400000 # 24 horas em milissegundos
+  expiration: 86400000
 
 server:
   port: 8080

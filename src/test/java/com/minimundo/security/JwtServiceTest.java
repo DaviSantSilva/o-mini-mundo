@@ -58,9 +58,7 @@ class JwtServiceTest {
 
     @Test
     void testTokenExpirado() {
-        // Criar um token expirado
         String token = jwtService.gerarToken(usuario);
-        // Simular expiração
         Date dataExpiracao = new Date(System.currentTimeMillis() - 1000);
         boolean isValid = jwtService.validarToken(token, usuario);
 
