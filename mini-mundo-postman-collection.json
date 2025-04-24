@@ -1,0 +1,1678 @@
+{
+  "info": {
+    "name": "Mini Mundo API",
+    "description": "Collection para testar a API do Mini Mundo, incluindo diferentes níveis de acesso (User, Manager, Admin)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticação",
+      "description": "Endpoints para registro e login de usuários com diferentes níveis de acesso",
+      "item": [
+        {
+          "name": "Registrar Usuário (User)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste\",\n  \"email\": \"{{emailUser}}\",\n  \"senha\": \"{{senhaUser}}\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Registrar Usuário (Manager)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Manager Teste\",\n  \"email\": \"{{emailManager}}\",\n  \"senha\": \"{{senhaManager}}\",\n  \"role\": \"MANAGER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Registrar Usuário (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Admin Teste\",\n  \"email\": \"{{emailAdmin}}\",\n  \"senha\": \"{{senhaAdmin}}\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login (User)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{emailUser}}\",\n    \"senha\": \"{{senhaUser}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set('tokenUser', jsonData.token);"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Login (Manager)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{emailManager}}\",\n    \"senha\": \"{{senhaManager}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set('tokenManager', jsonData.token);"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{emailAdmin}}\",\n    \"senha\": \"{{senhaAdmin}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set('tokenAdmin', jsonData.token);"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Testes de Acesso",
+      "description": "Testes para verificar as permissões de cada nível de acesso",
+      "item": [
+        {
+          "name": "User - Acesso Básico",
+          "item": [
+            {
+              "name": "Projetos",
+              "item": [
+                {
+                  "name": "Criar Projeto",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"nome\": \"Projeto User\",\n    \"descricao\": \"Projeto criado por usuário comum\",\n    \"orcamento\": 10000.00,\n    \"status\": \"ATIVO\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"usuarioId\": {{usuarioId}}\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos"]
+                    },
+                    "event": [
+                      {
+                        "listen": "test",
+                        "script": {
+                          "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set('projetoId', jsonData.id);"
+                          ],
+                          "type": "text/javascript"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "Listar Projetos",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos"]
+                    }
+                  }
+                },
+                {
+                  "name": "Pesquisar Projetos por Nome",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/pesquisar?nome=Teste&usuarioId={{usuarioId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "pesquisar"],
+                      "query": [
+                        {
+                          "key": "nome",
+                          "value": "Teste"
+                        },
+                        {
+                          "key": "usuarioId",
+                          "value": "{{usuarioId}}"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Buscar Projeto por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Calcular Progresso do Projeto",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}/progresso",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}", "progresso"]
+                    }
+                  }
+                },
+                {
+                  "name": "Atualizar Projeto",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"nome\": \"Projeto Atualizado\",\n    \"descricao\": \"Descrição atualizada\",\n    \"orcamento\": 15000.00,\n    \"status\": \"INATIVO\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"usuarioId\": {{usuarioId}}\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Excluir Projeto",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Tarefas",
+              "item": [
+                {
+                  "name": "Criar Tarefa",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"descricao\": \"Tarefa Teste\",\n    \"projetoId\": {{projetoId}},\n    \"dataInicio\": \"2024-01-01T00:00:00\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"tarefaPredecessoraId\": null,\n    \"status\": \"NAO_CONCLUIDA\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas"]
+                    },
+                    "event": [
+                      {
+                        "listen": "test",
+                        "script": {
+                          "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set('tarefaId', jsonData.id);"
+                          ],
+                          "type": "text/javascript"
+                        }
+                      }
+                    ]
+                  },
+                  "description": "Cria uma nova tarefa"
+                },
+                {
+                  "name": "Listar Tarefas por Projeto",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "projeto", "{{projetoId}}"]
+                    },
+                    "description": "Lista todas as tarefas de um projeto específico"
+                  }
+                },
+                {
+                  "name": "Pesquisar Tarefas por Descrição",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/pesquisar?descricao=Teste",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "pesquisar"],
+                      "query": [
+                        {
+                          "key": "descricao",
+                          "value": "Teste"
+                        }
+                      ]
+                    },
+                    "description": "Pesquisa tarefas pela descrição"
+                  }
+                },
+                {
+                  "name": "Listar Tarefas por Projeto e Status",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}/status/NAO_CONCLUIDA",
+                      "host": ["{{baseUrl}}"],
+                      "path": [
+                        "tarefas",
+                        "projeto",
+                        "{{projetoId}}",
+                        "status",
+                        "NAO_CONCLUIDA"
+                      ]
+                    },
+                    "description": "Lista tarefas de um projeto com status específico (CONCLUIDA ou NAO_CONCLUIDA)"
+                  }
+                },
+                {
+                  "name": "Buscar Tarefa por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Busca uma tarefa específica pelo ID"
+                  }
+                },
+                {
+                  "name": "Atualizar Tarefa",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"descricao\": \"Tarefa Atualizada\",\n    \"dataInicio\": \"2024-02-01T00:00:00\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"status\": \"CONCLUIDA\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Atualiza uma tarefa existente"
+                  }
+                },
+                {
+                  "name": "Excluir Tarefa",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenUser}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Exclui uma tarefa específica"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Manager - Acesso Intermediário",
+          "item": [
+            {
+              "name": "Projetos",
+              "item": [
+                {
+                  "name": "Criar Projeto",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"nome\": \"Projeto Manager\",\n    \"descricao\": \"Projeto criado por manager\",\n    \"orcamento\": 20000.00,\n    \"status\": \"ATIVO\",\n    \"usuarioId\": \"{{usuarioId}}\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos"]
+                    }
+                  }
+                },
+                {
+                  "name": "Listar Todos os Projetos",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/todos",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "todos"]
+                    }
+                  }
+                },
+                {
+                  "name": "Buscar Projeto por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Atualizar Projeto",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"nome\": \"Projeto Atualizado\",\n    \"descricao\": \"Descrição atualizada\",\n    \"orcamento\": 25000.00,\n    \"status\": \"INATIVO\",\n    \"usuarioId\": \"{{usuarioId}}\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Excluir Projeto",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Tarefas",
+              "item": [
+                {
+                  "name": "Criar Tarefa",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"descricao\": \"Tarefa Teste\",\n    \"projetoId\": {{projetoId}},\n    \"dataInicio\": \"2023-01-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"tarefaPredecessoraId\": null,\n    \"status\": \"NAO_CONCLUIDA\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas"]
+                    },
+                    "event": [
+                      {
+                        "listen": "test",
+                        "script": {
+                          "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set('tarefaId', jsonData.id);"
+                          ],
+                          "type": "text/javascript"
+                        }
+                      }
+                    ]
+                  },
+                  "description": "Cria uma nova tarefa"
+                },
+                {
+                  "name": "Listar Tarefas por Projeto",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "projeto", "{{projetoId}}"]
+                    },
+                    "description": "Lista todas as tarefas de um projeto específico"
+                  }
+                },
+                {
+                  "name": "Pesquisar Tarefas por Descrição",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/pesquisar?descricao=Teste",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "pesquisar"],
+                      "query": [
+                        {
+                          "key": "descricao",
+                          "value": "Teste"
+                        }
+                      ]
+                    },
+                    "description": "Pesquisa tarefas pela descrição"
+                  }
+                },
+                {
+                  "name": "Listar Tarefas por Projeto e Status",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}/status/NAO_CONCLUIDA",
+                      "host": ["{{baseUrl}}"],
+                      "path": [
+                        "tarefas",
+                        "projeto",
+                        "{{projetoId}}",
+                        "status",
+                        "NAO_CONCLUIDA"
+                      ]
+                    },
+                    "description": "Lista tarefas de um projeto com status específico (CONCLUIDA ou NAO_CONCLUIDA)"
+                  }
+                },
+                {
+                  "name": "Buscar Tarefa por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Busca uma tarefa específica pelo ID"
+                  }
+                },
+                {
+                  "name": "Atualizar Tarefa",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"descricao\": \"Tarefa Atualizada\",\n    \"dataInicio\": \"2023-02-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"status\": \"CONCLUIDA\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Atualiza uma tarefa existente"
+                  }
+                },
+                {
+                  "name": "Excluir Tarefa",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenManager}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Exclui uma tarefa (apenas se não for predecessora de outra)"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Admin - Acesso Total",
+          "item": [
+            {
+              "name": "Projetos",
+              "item": [
+                {
+                  "name": "Criar Projeto",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"nome\": \"Projeto Admin\",\n    \"descricao\": \"Projeto criado por admin\",\n    \"orcamento\": 30000.00,\n    \"status\": \"ATIVO\",\n    \"usuarioId\": \"{{usuarioId}}\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos"]
+                    }
+                  }
+                },
+                {
+                  "name": "Listar Todos os Projetos",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/todos",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "todos"]
+                    }
+                  }
+                },
+                {
+                  "name": "Buscar Projeto por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Atualizar Projeto",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"nome\": \"Projeto Atualizado\",\n    \"descricao\": \"Descrição atualizada\",\n    \"orcamento\": 35000.00,\n    \"status\": \"INATIVO\",\n    \"usuarioId\": \"{{usuarioId}}\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Excluir Projeto",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["projetos", "{{projetoId}}"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Tarefas",
+              "item": [
+                {
+                  "name": "Criar Tarefa",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"descricao\": \"Tarefa Teste\",\n    \"projetoId\": {{projetoId}},\n    \"dataInicio\": \"2023-01-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"tarefaPredecessoraId\": null,\n    \"status\": \"NAO_CONCLUIDA\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas"]
+                    },
+                    "event": [
+                      {
+                        "listen": "test",
+                        "script": {
+                          "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set('tarefaId', jsonData.id);"
+                          ],
+                          "type": "text/javascript"
+                        }
+                      }
+                    ]
+                  },
+                  "description": "Cria uma nova tarefa"
+                },
+                {
+                  "name": "Listar Tarefas por Projeto",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "projeto", "{{projetoId}}"]
+                    },
+                    "description": "Lista todas as tarefas de um projeto específico"
+                  }
+                },
+                {
+                  "name": "Pesquisar Tarefas por Descrição",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/pesquisar?descricao=Teste",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "pesquisar"],
+                      "query": [
+                        {
+                          "key": "descricao",
+                          "value": "Teste"
+                        }
+                      ]
+                    },
+                    "description": "Pesquisa tarefas pela descrição"
+                  }
+                },
+                {
+                  "name": "Listar Tarefas por Projeto e Status",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}/status/NAO_CONCLUIDA",
+                      "host": ["{{baseUrl}}"],
+                      "path": [
+                        "tarefas",
+                        "projeto",
+                        "{{projetoId}}",
+                        "status",
+                        "NAO_CONCLUIDA"
+                      ]
+                    },
+                    "description": "Lista tarefas de um projeto com status específico (CONCLUIDA ou NAO_CONCLUIDA)"
+                  }
+                },
+                {
+                  "name": "Buscar Tarefa por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Busca uma tarefa específica pelo ID"
+                  }
+                },
+                {
+                  "name": "Atualizar Tarefa",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"descricao\": \"Tarefa Atualizada\",\n    \"dataInicio\": \"2023-02-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"status\": \"CONCLUIDA\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Atualiza uma tarefa existente"
+                  }
+                },
+                {
+                  "name": "Excluir Tarefa",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["tarefas", "{{tarefaId}}"]
+                    },
+                    "description": "Exclui uma tarefa (apenas se não for predecessora de outra)"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Usuários",
+              "item": [
+                {
+                  "name": "Listar Todos os Usuários",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/usuarios",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["usuarios"]
+                    }
+                  }
+                },
+                {
+                  "name": "Buscar Usuário por ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["usuarios", "{{usuarioId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Atualizar Usuário",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"nome\": \"Usuário Atualizado\",\n    \"email\": \"usuario.atualizado@teste.com\",\n    \"role\": \"MANAGER\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["usuarios", "{{usuarioId}}"]
+                    }
+                  }
+                },
+                {
+                  "name": "Excluir Usuário",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{tokenAdmin}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+                      "host": ["{{baseUrl}}"],
+                      "path": ["usuarios", "{{usuarioId}}"]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Projetos",
+      "description": "Endpoints para gerenciamento de projetos",
+      "item": [
+        {
+          "name": "Criar Projeto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Projeto Teste\",\n    \"descricao\": \"Descrição do projeto teste\",\n    \"orcamento\": 10000.00,\n    \"status\": \"ATIVO\",\n    \"usuarioId\": {{usuarioId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/projetos",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set('projetoId', jsonData.id);"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          "description": "Cria um novo projeto"
+        },
+        {
+          "name": "Listar Projetos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos"]
+            },
+            "description": "Lista todos os projetos do usuário autenticado"
+          }
+        },
+        {
+          "name": "Pesquisar Projetos por Nome",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/pesquisar?nome=Teste&usuarioId={{usuarioId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos", "pesquisar"],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "Teste"
+                },
+                {
+                  "key": "usuarioId",
+                  "value": "{{usuarioId}}"
+                }
+              ]
+            },
+            "description": "Pesquisa projetos pelo nome"
+          }
+        },
+        {
+          "name": "Buscar Projeto por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos", "{{projetoId}}"]
+            },
+            "description": "Busca um projeto específico pelo ID"
+          }
+        },
+        {
+          "name": "Atualizar Projeto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos", "{{projetoId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Projeto Atualizado\",\n  \"descricao\": \"Descrição atualizada do projeto\",\n  \"status\": \"ATIVO\",\n  \"orcamento\": 15000.00\n}"
+            },
+            "description": "Atualiza um projeto existente"
+          }
+        },
+        {
+          "name": "Excluir Projeto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos", "{{projetoId}}"]
+            },
+            "description": "Exclui um projeto (apenas se não tiver tarefas associadas)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tarefas",
+      "description": "Endpoints para gerenciamento de tarefas",
+      "item": [
+        {
+          "name": "Criar Tarefa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Tarefa Teste\",\n    \"projetoId\": {{projetoId}},\n    \"dataInicio\": \"2023-01-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"tarefaPredecessoraId\": null,\n    \"status\": \"NAO_CONCLUIDA\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tarefas",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set('tarefaId', jsonData.id);"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          "description": "Cria uma nova tarefa"
+        },
+        {
+          "name": "Listar Tarefas por Projeto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas", "projeto", "{{projetoId}}"]
+            },
+            "description": "Lista todas as tarefas de um projeto específico"
+          }
+        },
+        {
+          "name": "Pesquisar Tarefas por Descrição",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/pesquisar?descricao=Teste",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas", "pesquisar"],
+              "query": [
+                {
+                  "key": "descricao",
+                  "value": "Teste"
+                }
+              ]
+            },
+            "description": "Pesquisa tarefas pela descrição"
+          }
+        },
+        {
+          "name": "Listar Tarefas por Projeto e Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/projeto/{{projetoId}}/status/NAO_CONCLUIDA",
+              "host": ["{{baseUrl}}"],
+              "path": [
+                "tarefas",
+                "projeto",
+                "{{projetoId}}",
+                "status",
+                "NAO_CONCLUIDA"
+              ]
+            },
+            "description": "Lista tarefas de um projeto com status específico (CONCLUIDA ou NAO_CONCLUIDA)"
+          }
+        },
+        {
+          "name": "Buscar Tarefa por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas", "{{tarefaId}}"]
+            },
+            "description": "Busca uma tarefa específica pelo ID"
+          }
+        },
+        {
+          "name": "Atualizar Tarefa",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Tarefa Atualizada\",\n    \"dataInicio\": \"2023-02-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"status\": \"CONCLUIDA\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas", "{{tarefaId}}"]
+            },
+            "description": "Atualiza uma tarefa existente"
+          }
+        },
+        {
+          "name": "Excluir Tarefa",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas", "{{tarefaId}}"]
+            },
+            "description": "Exclui uma tarefa (apenas se não for predecessora de outra)"
+          }
+        },
+        {
+          "name": "Criar Tarefa com Predecessora",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descricao\": \"Tarefa Dependente\",\n    \"projetoId\": {{projetoId}},\n    \"dataInicio\": \"2023-02-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"tarefaPredecessoraId\": {{tarefaId}},\n    \"status\": \"NAO_CONCLUIDA\"\n}"
+            },
+            "description": "Cria uma tarefa que depende de outra (predecessora)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progresso",
+      "description": "Endpoints para visualização do progresso dos projetos",
+      "item": [
+        {
+          "name": "Visualizar Progresso do Projeto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}/progresso",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos", "{{projetoId}}", "progresso"]
+            },
+            "description": "Visualiza o progresso de um projeto (total de tarefas, tarefas concluídas, percentual concluído)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Testes de Validação",
+      "description": "Endpoints para testar as validações de regras de negócio",
+      "item": [
+        {
+          "name": "Tentar Criar Projeto com Nome Duplicado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Projeto Teste\",\n  \"descricao\": \"Tentativa de criar projeto com nome duplicado\",\n  \"status\": \"ATIVO\",\n  \"orcamento\": 20000.00\n}"
+            },
+            "description": "Tenta criar um projeto com um nome que já existe (deve falhar)"
+          }
+        },
+        {
+          "name": "Tentar Excluir Projeto com Tarefas",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos", "{{projetoId}}"]
+            },
+            "description": "Tenta excluir um projeto que possui tarefas associadas (deve falhar)"
+          }
+        },
+        {
+          "name": "Tentar Criar Tarefa com Data de Fim Anterior à Data de Início",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Tarefa com Datas Inválidas\",\n  \"projetoId\": {{projetoId}},\n  \"dataInicio\": \"2023-12-31T23:59:59\",\n  \"dataFim\": \"2023-01-01T00:00:00\",\n  \"status\": \"NAO_CONCLUIDA\"\n}"
+            },
+            "description": "Tenta criar uma tarefa com data de fim anterior à data de início (deve falhar)"
+          }
+        },
+        {
+          "name": "Tentar Excluir Tarefa que é Predecessora",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tarefas", "{{tarefaId}}"]
+            },
+            "description": "Tenta excluir uma tarefa que é predecessora de outra (deve falhar)"
+          }
+        },
+        {
+          "name": "Tentar Acessar Recurso de Outro Usuário",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenOutroUsuario}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["projetos", "{{projetoId}}"]
+            },
+            "description": "Tenta acessar um projeto de outro usuário (deve falhar)"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api"
+    },
+    {
+      "key": "token",
+      "value": "seu_token_jwt_aqui"
+    },
+    {
+      "key": "tokenOutroUsuario",
+      "value": "token_jwt_de_outro_usuario"
+    },
+    {
+      "key": "projetoId",
+      "value": "1"
+    },
+    {
+      "key": "tarefaId",
+      "value": "1"
+    },
+    {
+      "key": "usuarioId",
+      "value": "1"
+    }
+  ]
+}

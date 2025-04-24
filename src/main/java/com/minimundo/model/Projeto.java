@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class Projeto {
     private StatusProjeto status = StatusProjeto.ATIVO;
 
     private BigDecimal orcamento;
+
+    @Column(name = "data_fim")
+    private LocalDateTime dataFim;
 
     @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tarefa> tarefas = new ArrayList<>();

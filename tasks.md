@@ -1,4 +1,4 @@
-### **História de Usuário: CRUD de Tarefas**
+.### **História de Usuário: CRUD de Tarefas**
 
 **Como** usuário autenticado,  
 **Quero** criar, visualizar, editar e excluir tarefas associadas a um projeto,  

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
@@ -17,4 +18,8 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
     
     @Query("SELECT p FROM Projeto p WHERE p.usuario.id = :usuarioId AND LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
     List<Projeto> findByUsuarioIdAndNomeContainingIgnoreCase(@Param("usuarioId") Long usuarioId, @Param("nome") String nome);
+
+    List<Projeto> findByNomeContainingIgnoreCaseAndUsuarioId(String nome, Long usuarioId);
+    Optional<Projeto> findByIdAndUsuarioId(Long id, Long usuarioId);
+    boolean existsByNomeAndUsuarioId(String nome, Long usuarioId);
 } 

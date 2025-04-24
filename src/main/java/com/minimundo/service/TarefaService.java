@@ -1,10 +1,8 @@
 package com.minimundo.service;
 
 import com.minimundo.dto.TarefaDTO;
-import com.minimundo.model.Projeto;
-import com.minimundo.model.Tarefa;
-import com.minimundo.model.StatusTarefa;
-import com.minimundo.model.Usuario;
+import com.minimundo.exception.BusinessException;
+import com.minimundo.model.*;
 import com.minimundo.repository.ProjetoRepository;
 import com.minimundo.repository.TarefaRepository;
 import com.minimundo.repository.UsuarioRepository;
@@ -27,33 +25,36 @@ public class TarefaService {
     @Transactional
     public TarefaDTO criar(TarefaDTO dto, Long usuarioId) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
-
-        if (!projeto.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
+                .orElseThrow(() -> new BusinessException("Projeto não encontrado"));
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
 
-        if (dto.getDataFim() != null && dto.getDataInicio() != null && dto.getDataFim().isBefore(dto.getDataInicio())) {
-            throw new RuntimeException("A data de fim não pode ser anterior à data de início");
+        if (usuario.getRole() == Role.USER && !projeto.getUsuario().getId().equals(usuarioId)) {
+            throw new BusinessException("Acesso não autorizado");
         }
+
+        if (dto.getTarefaPredecessoraId() != null) {
+            Tarefa tarefaPredecessora = tarefaRepository.findById(dto.getTarefaPredecessoraId())
+                    .orElseThrow(() -> new BusinessException("Tarefa predecessora não encontrada"));
+            
+            if (!tarefaPredecessora.getProjeto().getId().equals(dto.getProjetoId())) {
+                throw new BusinessException("A tarefa predecessora deve pertencer ao mesmo projeto");
+            }
+        }
+
+        validarDatas(dto.getDataInicio(), dto.getDataFim(), projeto);
 
         Tarefa tarefa = Tarefa.builder()
                 .descricao(dto.getDescricao())
                 .projeto(projeto)
                 .dataInicio(dto.getDataInicio())
                 .dataFim(dto.getDataFim())
+                .tarefaPredecessora(dto.getTarefaPredecessoraId() != null ? 
+                    tarefaRepository.findById(dto.getTarefaPredecessoraId()).orElse(null) : null)
                 .status(dto.getStatus())
                 .usuario(usuario)
                 .build();
-
-        if (dto.getTarefaPredecessoraId() != null) {
-            Tarefa predecessora = tarefaRepository.findById(dto.getTarefaPredecessoraId())
-                    .orElseThrow(() -> new RuntimeException("Tarefa predecessora não encontrada"));
-            tarefa.setTarefaPredecessora(predecessora);
-        }
 
         tarefa = tarefaRepository.save(tarefa);
         return converterParaDTO(tarefa);
@@ -62,10 +63,13 @@ public class TarefaService {
     @Transactional(readOnly = true)
     public List<TarefaDTO> listarPorProjeto(Long projetoId, Long usuarioId) {
         Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+                .orElseThrow(() -> new BusinessException("Projeto não encontrado"));
 
-        if (!projeto.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        if (usuario.getRole() == Role.USER && !projeto.getUsuario().getId().equals(usuarioId)) {
+            throw new BusinessException("Acesso não autorizado");
         }
 
         return tarefaRepository.findByProjetoId(projetoId)
@@ -73,25 +77,38 @@ public class TarefaService {
                 .map(this::converterParaDTO)
                 .collect(Collectors.toList());
     }
-    
+
     @Transactional(readOnly = true)
     public List<TarefaDTO> pesquisarPorDescricao(String descricao, Long usuarioId) {
-        return tarefaRepository.findByUsuarioIdAndDescricaoContainingIgnoreCase(usuarioId, descricao)
-                .stream()
-                .map(this::converterParaDTO)
-                .collect(Collectors.toList());
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        if (usuario.getRole() == Role.ADMIN) {
+            return tarefaRepository.findByDescricaoContainingIgnoreCase(descricao)
+                    .stream()
+                    .map(this::converterParaDTO)
+                    .collect(Collectors.toList());
+        } else {
+            return tarefaRepository.findByDescricaoContainingIgnoreCaseAndUsuarioId(descricao, usuarioId)
+                    .stream()
+                    .map(this::converterParaDTO)
+                    .collect(Collectors.toList());
+        }
     }
-    
+
     @Transactional(readOnly = true)
     public List<TarefaDTO> listarPorProjetoEStatus(Long projetoId, StatusTarefa status, Long usuarioId) {
         Projeto projeto = projetoRepository.findById(projetoId)
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+                .orElseThrow(() -> new BusinessException("Projeto não encontrado"));
 
-        if (!projeto.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        if (usuario.getRole() == Role.USER && !projeto.getUsuario().getId().equals(usuarioId)) {
+            throw new BusinessException("Acesso não autorizado");
         }
 
-        return tarefaRepository.findByUsuarioIdAndProjetoIdAndStatus(usuarioId, projetoId, status)
+        return tarefaRepository.findByProjetoIdAndStatus(projetoId, status)
                 .stream()
                 .map(this::converterParaDTO)
                 .collect(Collectors.toList());
@@ -100,10 +117,13 @@ public class TarefaService {
     @Transactional(readOnly = true)
     public TarefaDTO buscarPorId(Long id, Long usuarioId) {
         Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+                .orElseThrow(() -> new BusinessException("Tarefa não encontrada"));
 
-        if (!tarefa.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        if (usuario.getRole() == Role.USER && !tarefa.getUsuario().getId().equals(usuarioId)) {
+            throw new BusinessException("Acesso não autorizado");
         }
 
         return converterParaDTO(tarefa);
@@ -112,26 +132,32 @@ public class TarefaService {
     @Transactional
     public TarefaDTO atualizar(Long id, TarefaDTO dto, Long usuarioId) {
         Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+                .orElseThrow(() -> new BusinessException("Tarefa não encontrada"));
 
-        if (!tarefa.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        if (usuario.getRole() == Role.USER && !tarefa.getUsuario().getId().equals(usuarioId)) {
+            throw new BusinessException("Acesso não autorizado");
         }
 
-        if (dto.getDataFim() != null && dto.getDataInicio() != null && dto.getDataFim().isBefore(dto.getDataInicio())) {
-            throw new RuntimeException("A data de fim não pode ser anterior à data de início");
+        if (dto.getTarefaPredecessoraId() != null) {
+            Tarefa tarefaPredecessora = tarefaRepository.findById(dto.getTarefaPredecessoraId())
+                    .orElseThrow(() -> new BusinessException("Tarefa predecessora não encontrada"));
+            
+            if (!tarefaPredecessora.getProjeto().getId().equals(tarefa.getProjeto().getId())) {
+                throw new BusinessException("A tarefa predecessora deve pertencer ao mesmo projeto");
+            }
         }
+
+        validarDatas(dto.getDataInicio(), dto.getDataFim(), tarefa.getProjeto());
 
         tarefa.setDescricao(dto.getDescricao());
         tarefa.setDataInicio(dto.getDataInicio());
         tarefa.setDataFim(dto.getDataFim());
+        tarefa.setTarefaPredecessora(dto.getTarefaPredecessoraId() != null ? 
+            tarefaRepository.findById(dto.getTarefaPredecessoraId()).orElse(null) : null);
         tarefa.setStatus(dto.getStatus());
-
-        if (dto.getTarefaPredecessoraId() != null) {
-            Tarefa predecessora = tarefaRepository.findById(dto.getTarefaPredecessoraId())
-                    .orElseThrow(() -> new RuntimeException("Tarefa predecessora não encontrada"));
-            tarefa.setTarefaPredecessora(predecessora);
-        }
 
         tarefa = tarefaRepository.save(tarefa);
         return converterParaDTO(tarefa);
@@ -140,14 +166,13 @@ public class TarefaService {
     @Transactional
     public void excluir(Long id, Long usuarioId) {
         Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+                .orElseThrow(() -> new BusinessException("Tarefa não encontrada"));
 
-        if (!tarefa.getUsuario().getId().equals(usuarioId)) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
 
-        if (tarefaRepository.existsByTarefaPredecessoraId(id)) {
-            throw new RuntimeException("Não é possível excluir uma tarefa que é predecessora de outra");
+        if (usuario.getRole() == Role.USER && !tarefa.getUsuario().getId().equals(usuarioId)) {
+            throw new BusinessException("Acesso não autorizado");
         }
 
         tarefaRepository.delete(tarefa);
@@ -160,9 +185,19 @@ public class TarefaService {
                 .projetoId(tarefa.getProjeto().getId())
                 .dataInicio(tarefa.getDataInicio())
                 .dataFim(tarefa.getDataFim())
-                .tarefaPredecessoraId(tarefa.getTarefaPredecessora() != null ? tarefa.getTarefaPredecessora().getId() : null)
                 .status(tarefa.getStatus())
-                .usuarioId(tarefa.getUsuario().getId())
+                .tarefaPredecessoraId(tarefa.getTarefaPredecessora() != null ? tarefa.getTarefaPredecessora().getId() : null)
                 .build();
+    }
+
+    private void validarDatas(LocalDateTime dataInicio, LocalDateTime dataFim, Projeto projeto) {
+        if (dataInicio != null && dataFim != null && dataFim.isBefore(dataInicio)) {
+            throw new BusinessException("A data de fim não pode ser anterior à data de início");
+        }
+
+        if (projeto.getDataFim() != null && dataInicio != null && dataFim != null 
+            && (dataInicio.isAfter(projeto.getDataFim()) || dataFim.isAfter(projeto.getDataFim()))) {
+            throw new BusinessException("A data de início e de fim devem estar dentro do período do projeto");
+        }
     }
 } 

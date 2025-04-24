@@ -1,0 +1,96 @@
+{
+  "id": "mini-mundo-env",
+  "name": "Mini Mundo Environments",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "tokenUser",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "tokenManager",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "tokenAdmin",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "projetoId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "tarefaId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "usuarioId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "emailUser",
+      "value": "user@teste.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "senhaUser",
+      "value": "senha123",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "emailManager",
+      "value": "manager@teste.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "senhaManager",
+      "value": "senha123",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "emailAdmin",
+      "value": "admin@teste.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "senhaAdmin",
+      "value": "senha123",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "tokenOutroUsuario",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    }
+  ]
+} 
