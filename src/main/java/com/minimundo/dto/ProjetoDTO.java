@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -19,6 +20,7 @@ public class ProjetoDTO {
     private String descricao;
     private StatusProjeto status;
     private BigDecimal orcamento;
+    private LocalDateTime dataFim;
     private List<TarefaDTO> tarefas;
     private Long usuarioId;
 } 

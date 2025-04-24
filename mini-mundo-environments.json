@@ -79,6 +79,18 @@
       "value": "senha123",
       "type": "secret",
       "enabled": true
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "tokenOutroUsuario",
+      "value": "",
+      "type": "secret",
+      "enabled": true
     }
   ]
 } 

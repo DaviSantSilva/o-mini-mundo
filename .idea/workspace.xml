@@ -7,48 +7,56 @@
     <list default="true" id="3912af27-430f-42d4-be41-c0e479569026" name="Changes" comment="bug fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/POSTMAN-README.md" beforeDir="false" afterPath="$PROJECT_DIR$/POSTMAN-README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-pre-request-script.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth-pre-request-script.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mini-mundo-environments.json" beforeDir="false" afterPath="$PROJECT_DIR$/mini-mundo-environments.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mini-mundo-postman-collection.json" beforeDir="false" afterPath="$PROJECT_DIR$/mini-mundo-postman-collection.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/OMiniMundoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/OMiniMundoApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/postman-tests.js" beforeDir="false" afterPath="$PROJECT_DIR$/postman-tests.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/controller/AuthenticationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/dto/AuthenticationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/dto/AuthenticationRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/dto/TarefaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/dto/TarefaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/controller/ProjetoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/controller/ProjetoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/controller/TarefaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/controller/TarefaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/dto/ProjetoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/dto/ProjetoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/exception/BusinessException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/exception/BusinessException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/model/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/repository/ProjetoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/repository/ProjetoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/model/Projeto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/model/Projeto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/model/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/repository/TarefaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/repository/TarefaRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/security/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/security/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/security/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/security/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/service/AuthenticationService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/service/ProjetoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/service/ProjetoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/minimundo/service/TarefaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/minimundo/service/TarefaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/minimundo/controller/ProjetoControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/minimundo/controller/ProjetoControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/minimundo/security/JwtServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/minimundo/security/JwtServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/minimundo/service/ProjetoServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/minimundo/service/ProjetoServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/application-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/application-test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/OMiniMundoApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/OMiniMundoApplication.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/config/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/controller/AuthenticationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/controller/AuthenticationController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/controller/ProjetoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/controller/ProjetoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/controller/TarefaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/controller/TarefaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationRequest$AuthenticationRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationRequest$AuthenticationRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationResponse$AuthenticationResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationResponse$AuthenticationResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/AuthenticationResponse.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoDTO$ProjetoDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoDTO$ProjetoDTOBuilder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoProgressoDTO$ProjetoProgressoDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoProgressoDTO$ProjetoProgressoDTOBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoProgressoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/ProjetoProgressoDTO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/TarefaDTO$TarefaDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/TarefaDTO$TarefaDTOBuilder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/dto/TarefaDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/dto/TarefaDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/exception/ErrorResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/exception/ErrorResponse.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/Projeto$ProjetoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/Projeto$ProjetoBuilder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/Projeto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/Projeto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/Tarefa$TarefaBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/Tarefa$TarefaBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/Tarefa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/Tarefa.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/Usuario$UsuarioBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/Usuario$UsuarioBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/StatusProjeto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/StatusProjeto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/StatusTarefa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/StatusTarefa.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/model/Usuario.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/repository/ProjetoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/repository/ProjetoRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/repository/TarefaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/repository/TarefaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/repository/UsuarioRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/repository/UsuarioRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/security/CustomUserDetailsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/security/CustomUserDetailsService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/security/JwtAuthenticationFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/security/JwtAuthenticationFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/security/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/security/JwtService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/service/AuthenticationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/service/AuthenticationService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/service/ProjetoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/service/ProjetoService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/minimundo/service/TarefaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/minimundo/service/TarefaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/minimundo/config/SecurityTestConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/minimundo/config/SecurityTestConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/minimundo/config/TestConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/minimundo/config/TestConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/minimundo/controller/ProjetoControllerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/minimundo/controller/ProjetoControllerTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/minimundo/exception/BusinessExceptionTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/minimundo/exception/BusinessExceptionTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,27 +89,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.OMiniMundoApplication.executor": "Debug",
-    "JUnit.JwtServiceTest.executor": "Run",
-    "JUnit.JwtServiceTest.testGerarToken.executor": "Debug",
-    "JUnit.ProjetoControllerTest.executor": "Run",
-    "JUnit.java in o-mini-mundo.executor": "Run",
-    "JUnit.test-annotations in o-mini-mundo.executor": "Run",
-    "Maven.o-mini-mundo [clean].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHELLCHECK.PATH": "C:\\Users\\Davi\\AppData\\Roaming\\JetBrains\\IdeaIC2025.1\\plugins\\Shell Script\\shellcheck.exe",
-    "Shell Script.reset-database.sh.executor": "Run",
-    "git-widget-placeholder": "develop",
-    "last_opened_file_path": "C:/Users/Davi/Desktop/o-mini-mundo",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.OMiniMundoApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.JwtServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.JwtServiceTest.testGerarToken.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.ProjetoControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.java in o-mini-mundo.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.test-annotations in o-mini-mundo.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.o-mini-mundo [clean].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHELLCHECK.PATH&quot;: &quot;C:\\Users\\Davi\\AppData\\Roaming\\JetBrains\\IdeaIC2025.1\\plugins\\Shell Script\\shellcheck.exe&quot;,
+    &quot;Shell Script.reset-database.sh.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Davi/Desktop/o-mini-mundo&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.OMiniMundoApplication">
     <configuration name="OMiniMundoApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.minimundo.OMiniMundoApplication" />

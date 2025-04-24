@@ -199,7 +199,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"nome\": \"Projeto User\",\n    \"descricao\": \"Projeto criado por usuário comum\",\n    \"orcamento\": 10000.00,\n    \"status\": \"ATIVO\",\n    \"usuarioId\": {{usuarioId}}\n}"
+                      "raw": "{\n    \"nome\": \"Projeto User\",\n    \"descricao\": \"Projeto criado por usuário comum\",\n    \"orcamento\": 10000.00,\n    \"status\": \"ATIVO\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"usuarioId\": {{usuarioId}}\n}"
                     },
                     "url": {
                       "raw": "{{baseUrl}}/projetos",
@@ -244,17 +244,21 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{tokenUser}}"
+                        "value": "Bearer {{token}}"
                       }
                     ],
                     "url": {
-                      "raw": "{{baseUrl}}/projetos/pesquisar?nome=Teste",
+                      "raw": "{{baseUrl}}/projetos/pesquisar?nome=Teste&usuarioId={{usuarioId}}",
                       "host": ["{{baseUrl}}"],
                       "path": ["projetos", "pesquisar"],
                       "query": [
                         {
                           "key": "nome",
                           "value": "Teste"
+                        },
+                        {
+                          "key": "usuarioId",
+                          "value": "{{usuarioId}}"
                         }
                       ]
                     }
@@ -310,7 +314,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"nome\": \"Projeto Atualizado\",\n    \"descricao\": \"Descrição atualizada\",\n    \"orcamento\": 15000.00,\n    \"status\": \"INATIVO\",\n    \"usuarioId\": {{usuarioId}}\n}"
+                      "raw": "{\n    \"nome\": \"Projeto Atualizado\",\n    \"descricao\": \"Descrição atualizada\",\n    \"orcamento\": 15000.00,\n    \"status\": \"INATIVO\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"usuarioId\": {{usuarioId}}\n}"
                     },
                     "url": {
                       "raw": "{{baseUrl}}/projetos/{{projetoId}}",
@@ -357,7 +361,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"descricao\": \"Tarefa Teste\",\n    \"projetoId\": {{projetoId}},\n    \"dataInicio\": \"2023-01-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"tarefaPredecessoraId\": null,\n    \"status\": \"NAO_CONCLUIDA\"\n}"
+                      "raw": "{\n    \"descricao\": \"Tarefa Teste\",\n    \"projetoId\": {{projetoId}},\n    \"dataInicio\": \"2024-01-01T00:00:00\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"tarefaPredecessoraId\": null,\n    \"status\": \"NAO_CONCLUIDA\"\n}"
                     },
                     "url": {
                       "raw": "{{baseUrl}}/tarefas",
@@ -479,7 +483,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"descricao\": \"Tarefa Atualizada\",\n    \"dataInicio\": \"2023-02-01T00:00:00\",\n    \"dataFim\": \"2023-12-31T23:59:59\",\n    \"status\": \"CONCLUIDA\"\n}"
+                      "raw": "{\n    \"descricao\": \"Tarefa Atualizada\",\n    \"dataInicio\": \"2024-02-01T00:00:00\",\n    \"dataFim\": \"2024-12-31T23:59:59\",\n    \"status\": \"CONCLUIDA\"\n}"
                     },
                     "url": {
                       "raw": "{{baseUrl}}/tarefas/{{tarefaId}}",
@@ -504,7 +508,7 @@
                       "host": ["{{baseUrl}}"],
                       "path": ["tarefas", "{{tarefaId}}"]
                     },
-                    "description": "Exclui uma tarefa (apenas se não for predecessora de outra)"
+                    "description": "Exclui uma tarefa específica"
                   }
                 }
               ]
@@ -1178,7 +1182,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"nome\": \"Projeto Teste\",\n    \"descricao\": \"Descrição do projeto teste\"\n}"
+              "raw": "{\n    \"nome\": \"Projeto Teste\",\n    \"descricao\": \"Descrição do projeto teste\",\n    \"orcamento\": 10000.00,\n    \"status\": \"ATIVO\",\n    \"usuarioId\": {{usuarioId}}\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/projetos",
@@ -1229,13 +1233,17 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/projetos/pesquisar?nome=Teste",
+              "raw": "{{baseUrl}}/projetos/pesquisar?nome=Teste&usuarioId={{usuarioId}}",
               "host": ["{{baseUrl}}"],
               "path": ["projetos", "pesquisar"],
               "query": [
                 {
                   "key": "nome",
                   "value": "Teste"
+                },
+                {
+                  "key": "usuarioId",
+                  "value": "{{usuarioId}}"
                 }
               ]
             },
@@ -1660,6 +1668,10 @@
     },
     {
       "key": "tarefaId",
+      "value": "1"
+    },
+    {
+      "key": "usuarioId",
       "value": "1"
     }
   ]

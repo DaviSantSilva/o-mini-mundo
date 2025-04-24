@@ -27,23 +27,14 @@ public class AuthenticationService {
             throw new RuntimeException("Email já está em uso");
         }
 
-        // Verifica se o usuário que está criando tem permissão para definir roles
-        var currentUser = SecurityContextHolder.getContext().getAuthentication();
-        var role = Role.USER;
-        
-        if (currentUser != null && currentUser.getAuthorities().stream()
-            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            role = request.getRole() != null ? request.getRole() : Role.USER;
-        }
-
         var user = Usuario.builder()
                 .nome(request.getNome())
                 .email(request.getEmail())
                 .senha(passwordEncoder.encode(request.getSenha()))
-                .role(role)
+                .role(request.getRole() != null ? request.getRole() : Role.USER)
                 .build();
 
-        repository.save(user);
+        user = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
